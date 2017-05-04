@@ -1,0 +1,7 @@
+Flask
+flask-mongoengine
+Flask-Script
+flask-sqlalchemy
+mysql-python
+flask-bootstrap
+flask-moment
