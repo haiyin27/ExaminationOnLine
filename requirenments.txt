@@ -5,3 +5,6 @@ flask-sqlalchemy
 mysql-python
 flask-bootstrap
 flask-moment
+flask-sqlalchemy
+mysql-connector
+flask-mail

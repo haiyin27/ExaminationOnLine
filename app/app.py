@@ -14,14 +14,20 @@ from flask_bootstrap import Bootstrap
 from wtforms import StringField
 from wtforms import SubmitField
 from wtforms.validators import Required
-
+from models import User
+from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)  # pylint: disable=invalid-name
 
+app.config[
+    'SQLALCHEMY_DATABASE_URI'] = 'mysql://root:123456@localhost:3306/hfbank?charset=utf8'
+app.config.setdefault('SQLALCHEMY_TRACK_MODIFICATIONS', True)
 app.config['SECRET_KEY'] = 'HfBaNk'
 
 manager = Manager(app)
 bootstrap = Bootstrap(app)
 moment = Moment(app)
+
+db = SQLAlchemy(app)
 
 class NameForm(FlaskForm):
     name = StringField('What is your name?', validators=[Required()])
@@ -32,12 +38,14 @@ class NameForm(FlaskForm):
 def index():
     form = NameForm()
     if form.validate_on_submit():
-        old_name = session.get('name')
-        if old_name is not None and old_name != form.name.data:
-            flash('Looks like you have changed your name!')
+        user = User.query.filter_by(username=form.name.data).first();
+        if user is None:
+            session["known"] = False
+        else:
+            session['known'] = True
         session['name'] = form.name.data
         return redirect(url_for('index'))
-    return render_template('index.html', form=form, name=session.get('name'))
+    return render_template('index.html', form=form, name=session.get('name'),  known=session.get('known', False))
 
 @app.route('/user/<name>')
 def user(name):
