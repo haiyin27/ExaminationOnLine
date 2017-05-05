@@ -8,3 +8,6 @@ flask-moment
 flask-sqlalchemy
 mysql-connector
 flask-mail
+flask-login
+werkzeug
+itsdangerous

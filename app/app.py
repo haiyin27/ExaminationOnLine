@@ -6,7 +6,6 @@ from flask import redirect
 from flask import url_for
 from flask import render_template
 from flask import make_response
-from flask import flash
 from flask_moment import Moment
 from flask_script import Manager
 from flask_wtf import FlaskForm
@@ -16,12 +15,10 @@ from wtforms import SubmitField
 from wtforms.validators import Required
 from models import User
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import login_required
+
 app = Flask(__name__)  # pylint: disable=invalid-name
 
-app.config[
-    'SQLALCHEMY_DATABASE_URI'] = 'mysql://root:123456@localhost:3306/hfbank?charset=utf8'
-app.config.setdefault('SQLALCHEMY_TRACK_MODIFICATIONS', True)
-app.config['SECRET_KEY'] = 'HfBaNk'
 
 manager = Manager(app)
 bootstrap = Bootstrap(app)
@@ -60,6 +57,11 @@ def internal_server_error(e):
     resp = make_response(render_template('500.html'), 404)
     resp.headers['X-Something'] = '500'
     return resp
+
+@app.route('/secret')
+@login_required
+def secret():
+    return 'Only authenticated users are allowed!'
 
 if __name__ == '__main__':
     manager.run()
