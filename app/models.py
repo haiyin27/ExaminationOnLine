@@ -50,14 +50,26 @@ class Role(db.Model):
     def __repr__(self):
         return '<Role %r>' % self.name
 
+
+# class Examination(db.Model):
+#     __table__ = 'examinations'
+#     id = db.Column(db.Integer, primary_key=True)
+#     examname = db.Column(db.String(80), unique=True, nullable=False)
+#     examdate = db.Column(db.Float, nullable=False)
+#     examduration = db.Column(db.Float, index=True, nullable=False)
+#     examtype = db.Column(db.Integer, nullable=False)
+#
+#     login_at = db.Column(db.Float, nullable=False)
+#     create_at = db.Column(db.Float, nullable=False)
+
+    def __repr__(self):
+        return '<Examination %r>' % self.examname
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-@app.route('/secret')
-@login_required
-def secret():
-    return 'Only authenticated users are allowed!'
+
 
 if __name__ == '__main__':
     manager.run()

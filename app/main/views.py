@@ -5,6 +5,7 @@ from ..models import User
 from ..mail import send_email
 from . import main
 from .forms import NameForm
+from flask_login import login_required, login_user
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
@@ -25,3 +26,13 @@ def index():
     return render_template('index.html',
                            form=form, name=session.get('name'),
                            known=session.get('known', False))
+
+@main.route('/examination')
+@login_required
+def examination():
+    # 判断用户登录状态，显示考试列表
+    return render_template('examination.html')
+
+@main.route('/secret')
+def secret():
+    return 'Only authenticated users are allowed!'
